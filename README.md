@@ -4,13 +4,19 @@ A simple 2D roguelike game built using [Raylib](https://www.raylib.com/).
 
 ## Description
 
-This is a roguelike game where you can move a character around a grid using the arrow keys. The game is built with Raylib.
+This is a roguelike game where you can move a character around a grid using the arrow keys. The game is built with Raylib and features multiple levels, platforms, and enemies.
 
 ## Features
 
-- Basic character movement with arrow keys.
-- Boundaries to prevent the character from going off-screen.
-- Simple 2D graphical representation of the character.
+- **Basic character movement** with arrow keys.
+- **Jumping mechanics** with gravity and platform detection.
+- **Multiple levels** with transitions between scenes.
+- **Platforms** to jump on and navigate through.
+- **Seeking enemies** that chase the player.
+- **Collision detection** for platforms, doors, and enemies.
+- **Fade transitions** between levels.
+- **Boundaries** to prevent the character from going off-screen.
+- **Simple 2D graphical representation** of the character, platforms, and enemies.
 
 ## Requirements
 
@@ -43,4 +49,3 @@ Once the project is built, you can run the game by navigating to the `build` dir
 
 ```bash
 ./roguelike
-```
