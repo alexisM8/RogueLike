@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-bool AtDoor(Rectangle rect1, Rectangle rect2) {
+bool AtOject(Rectangle rect1, Rectangle rect2) {
         return (rect1.x < rect2.x + rect2.width &&
                 rect1.x + rect1.width > rect2.x &&
                 rect1.y < rect2.y + rect2.height &&
@@ -26,7 +26,7 @@ int main() {
     float characterHeight = 40.0f;
 
     // Variables
-    float jumpSpeed = -15.0f;  // Negative value for jumping up
+    float jumpSpeed = -12.5f;  // Negative value for jumping up
     float gravity = 0.5f;      // Gravity pulling down
     float verticalVelocity = 0.0f;  // Velocity in the vertical direction
     float fallSpeed = 0.0f; // Speed of falling
@@ -34,7 +34,11 @@ int main() {
     float groundLevel = screenHeight - characterHeight;  // Ground level
     bool onPlatform = false; // Is character on platform
     float alpha = 0.0f;       // Transparency value for fade effect
+    float alpha2 = 0.0f; // Fade effect for death
     bool transitioning = false;  // Flag for the transition
+    bool dead = false; // Flag for if character dies
+    bool maxheightReached = false; // jumper reaches max height
+    float maxHeight = 65.0f;
 
     // Create scenes
     enum GameScene {
@@ -46,15 +50,24 @@ int main() {
 
     // Define platforms
     Rectangle platforms1[] = {
-        { 300, 500, 200, 20 },
-        { 700, 400, 200, 20 },
-        { 1100, 300, 200, 20 },
-        { 500, 200, 200, 20 }
+        { 50, 600, 150, 20 },
+        { 75, 200, 75, 20 },
+        { 250, 150, 25, 20 },
+        { 300, 500, 150, 20 },
+        { 300, 300, 150, 20 },
+        { 700, 400, 150, 20 },
+        { 1100, 300, 150, 20 },
+        { 900, 175, 75, 20 },
+        { 600, 100, 150, 20 }
     };
     int platformCount1 = sizeof(platforms1) / sizeof(platforms1[0]);
     Rectangle platforms2[] = {
         { 1100, 500, 200, 20 },
-        { 700, 200, 200, 20 },
+        { 900, 300, 50, 20},
+        { 700, 300, 25, 20},
+        { 500, 200, 25, 20},
+        { 300, 500, 100, 20},
+        { 100, 150, 50, 20 },
     };
     int platformCount2 = sizeof(platforms2) / sizeof(platforms2[0]);
     Rectangle platforms3[] = {
@@ -63,13 +76,27 @@ int main() {
     int platformCount3 = sizeof(platforms3) / sizeof(platforms3[0]);
 
     // Define door
-    Rectangle door = { 1200, groundLevel - 50, 50, 100 };
-    Rectangle door2 = { 1200, 480 - 50, 50, 100 };
+    Rectangle door = { 650, 25, 50, 75 };
+    Rectangle door2 = { 100, 25, 50, 75 };
 
     // Enemies
-    Rectangle seekingEnemy = { 50, 100, 75, 75 }; // seekingEnemy starts at x=50, y=500 with width/height 50
+    // seekingEnemy starts at x=50, y=100 with width/height 75
+    // Speed of movement toward the player
+    Rectangle seekingEnemy = { 50, 100, 75, 75 };
     float seekingenemySpeed = 3.0f;  // Speed of movement toward the player
+    Rectangle seekingEnemy2 = { 1350, 100, 75, 75 };
 
+    Rectangle walkingEnemy = {1300, 650, 50, 50};
+    float walkingenemySpeed = 2.0f;
+    float jumpingenemyHeight = 1.5f;
+
+    Rectangle shooters[] = {
+        {1350, 325, 20, 20},
+        {1350, 475, 20, 20},
+        {1350, 175, 20, 20},
+    };
+    int shootercount = sizeof(shooters) / sizeof(shooters[0]);
+    float shooterSpeed = 5.0f;
     
     // Main game loop
     while (!WindowShouldClose()) {
@@ -82,7 +109,7 @@ int main() {
             characterY = screenHeight - characterHeight;
 
         // Create movment
-        if (!transitioning) {
+        if (!transitioning && !dead) {
             if (IsKeyDown(KEY_RIGHT)) characterX += movmentSpeed;  // Move right
             if (IsKeyDown(KEY_LEFT)) characterX -= movmentSpeed;   // Move left
             if (IsKeyDown(KEY_DOWN)&& (characterY + characterHeight < screenHeight)) {
@@ -109,7 +136,8 @@ int main() {
                     currentScene = SCENE_THREE;
                 }
                 else if (currentScene == SCENE_THREE){
-                    seekingEnemy = {50, 100, 50, 50};
+                    seekingEnemy = {50, 100, 75, 75 };
+                    seekingEnemy2 = { 1350, 100, 75, 75};
                     currentScene = SCENE_ONE;
                 }
                 characterX = 100.0f;  // Move character to the next level's starting position
@@ -119,6 +147,21 @@ int main() {
             }
         } else if (alpha > 0.0f) {
             alpha -= 0.02f;  // Decrease alpha for fade-in
+        }
+
+        if (dead) {
+            alpha2 += 0.02f;
+            if (alpha2 >= 1.0f) {
+            
+                currentScene = SCENE_ONE;
+                characterX = 100.0f;  // Move character to the next level's starting position
+                characterY = groundLevel;
+                alpha2 = 1.0f;  // Cap alpha to fully opaque
+                dead = false;
+            }
+        }
+        else if (alpha2 > 0.0f) {
+            alpha2 -= 0.02f;  // Decrease alpha for fade-in
         }
 
 
@@ -204,11 +247,58 @@ int main() {
                 }
             }
             if (!onPlatform) {
-                characterY += 0.5f;
+                characterY += 1.0f;
             }
+            // Move the enemy
+            if (walkingEnemy.x == 0) {
+                walkingEnemy.x = 1300;
+            }
+            else {
+                walkingEnemy.x -= walkingenemySpeed;
+            }
+
+            // Jump
+            if (!maxheightReached) {
+                walkingEnemy.y -= jumpingenemyHeight;
+                if (walkingEnemy.y <= (groundLevel - maxHeight)) {
+                    maxheightReached = true;
+                }
+            }
+            // Fall back down
+            else {
+                walkingEnemy.y += jumpingenemyHeight;
+                if (walkingEnemy.y >= groundLevel) {
+                    maxheightReached = false;
+                }
+            }
+
+
+            // Move shooters
+            for (int i = 0; i < shootercount; i++) {
+                if (shooters[i].x <= 0) {
+                    shooters[i].x = 1300;
+                }
+                else {
+                    shooters[i].x -= shooterSpeed;
+                }
+            }
+
             // Check if at door
-            if (AtDoor({characterX, characterY, characterWidth, characterHeight}, door)) {
+            if (AtOject({characterX, characterY, characterWidth, characterHeight}, door)) {
                 transitioning = true;
+            }
+
+            // Check if at walking enemy
+            if (AtOject({characterX, characterY, characterWidth, characterHeight}, walkingEnemy)) {
+                dead = true;
+            }
+
+            // Check if hit shooters
+            for (int i = 0; i < shootercount; i++) {
+                if (AtOject({characterX, characterY, characterWidth, characterHeight}, shooters[i])) {
+                    dead = true;
+                }
+                
             }
         }
         
@@ -224,10 +314,10 @@ int main() {
                 }
             }
             if (!onPlatform) {
-                characterY += 0.5f;
+                characterY += 1.0f;
             }
             // Check if at door
-            if (AtDoor({characterX, characterY, characterWidth, characterHeight}, door2)) {
+            if (AtOject({characterX, characterY, characterWidth, characterHeight}, door2)) {
                 transitioning = true;
             }
         
@@ -245,7 +335,7 @@ int main() {
             }
 
             if (!onPlatform) {
-                characterY += 0.5f;
+                characterY += 1.0f;
             }
             
             // Move the seekingEnemy
@@ -261,8 +351,22 @@ int main() {
                 seekingEnemy.y -= seekingenemySpeed;  // Move up
             }
 
-            if(AtDoor({characterX, characterY, characterWidth, characterHeight}, seekingEnemy)) {
-                transitioning = true;
+            // Enemy2
+            if (seekingEnemy2.x < characterX) {
+                seekingEnemy2.x += seekingenemySpeed;  // Move right
+            } else if (seekingEnemy2.x > characterX) {
+                seekingEnemy2.x -= seekingenemySpeed;  // Move left
+            }
+
+            if (seekingEnemy2.y < characterY) {
+                seekingEnemy2.y += seekingenemySpeed;  // Move down
+            } else if (seekingEnemy2.y > characterY) {
+                seekingEnemy2.y -= seekingenemySpeed;  // Move up
+            }
+
+            if(AtOject({characterX, characterY, characterWidth, characterHeight}, seekingEnemy) || 
+            AtOject({characterX, characterY, characterWidth, characterHeight}, seekingEnemy2)) {
+                dead = true;
             }
 
         }
@@ -284,6 +388,12 @@ int main() {
             // Create rectangles
             DrawRectangle(characterX, characterY, characterWidth, characterHeight, BLACK);
             DrawRectangleRec(door, RED);
+            DrawRectangleRec(walkingEnemy, MAROON);
+            
+            // Shooters
+            for (int i = 0; i < shootercount; i++) {
+                DrawRectangleRec(shooters[i], GREEN);
+            }
 
             // Draw Texts
             DrawText("Use arrow keys to move!", 10, 10, 20, DARKGRAY);
@@ -319,14 +429,18 @@ int main() {
 
             // Draw seekingEnemy
             DrawRectangleRec(seekingEnemy, MAROON);
+            DrawRectangleRec(seekingEnemy2, MAROON);
 
             // Draw Texts
             DrawText("Good luck!", 10, 10, 20, PURPLE);
         }
 
         // Draw fade effect
-        if (alpha > 0.0f) {
+        if (alpha > 0.0f || alpha2 > 0.0f) {
             DrawRectangle(0, 0, screenWidth, screenHeight, Fade(BLACK, alpha));
+        }
+        if (alpha2 > 0.0f) {
+            DrawRectangle(0, 0, screenWidth, screenHeight, Fade(BLACK, alpha2));
         }
 
         // End drawing
