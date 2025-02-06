@@ -51,15 +51,12 @@ int main() {
     // Define platforms
     Rectangle platforms1[] = {
         { 50, 600, 150, 20 },
-        { 75, 200, 75, 20 },
-        { 250, 150, 25, 20 },
-        { 300, 500, 150, 20 },
-        { 300, 300, 150, 20 },
-        { 700, 400, 150, 20 },
-        { 1100, 300, 150, 20 },
-        { 900, 175, 75, 20 },
-        { 600, 100, 150, 20 }
+        { 400, 500, 125, 20 },
+        { 750, 375, 100, 20 },
+        { 1050, 250, 100, 20 },
+        { 1300, 150, 100, 20 }
     };
+
     int platformCount1 = sizeof(platforms1) / sizeof(platforms1[0]);
     Rectangle platforms2[] = {
         { 1100, 500, 200, 20 },
@@ -76,7 +73,7 @@ int main() {
     int platformCount3 = sizeof(platforms3) / sizeof(platforms3[0]);
 
     // Define door
-    Rectangle door = { 650, 25, 50, 75 };
+    Rectangle door = { 1325, 75, 50, 75 };
     Rectangle door2 = { 100, 25, 50, 75 };
 
     // Enemies
