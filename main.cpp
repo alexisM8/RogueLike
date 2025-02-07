@@ -1,6 +1,9 @@
 #include "raylib.h"
 #include <iostream>
 
+#define SPRITE_COLUMNS 7
+#define SPRITE_SCALE 2.0f
+
 
 bool AtOject(Rectangle rect1, Rectangle rect2) {
         return (rect1.x < rect2.x + rect2.width &&
@@ -18,12 +21,26 @@ int main() {
     // Set FPS
     SetTargetFPS(60);
 
+    // Load sprite sheet
+    Texture2D spriteSheet = LoadTexture("../assets/Cat/IdleCatb.png");
+    Texture2D jumpSprite = LoadTexture("../assets/Cat/JumpCatb.png"); 
+    // Define sprite frame size
+    float frameWidth = spriteSheet.width / SPRITE_COLUMNS;
+    float frameHeight = spriteSheet.height;
+    // Animation variables
+    float currentFrame = 0.0f;
+    float frameTime = 0.1f;  // Time per frame
+    float timer = 0.0f;
+    // Character position
+    Vector2 position = { screenWidth / 2.0f, screenHeight / 2.0f };
+
     // Rectangle attributes
-    float characterX = screenWidth / 2.0f;  // Start in the center
-    float characterY = screenHeight / 2.0f;
+    // float characterX = screenWidth / 2.0f;  // Start in the center
+    // float characterY = screenHeight / 2.0f;
     float movmentSpeed = 10.0f;  // Speed of movement
-    float characterWidth = 40.0f;
-    float characterHeight = 40.0f;
+    float characterWidth =  20.0f + (spriteSheet.width / SPRITE_COLUMNS);
+    float characterHeight = (spriteSheet.height * 2) - 5.0f;
+
 
     // Variables
     float jumpSpeed = -12.5f;  // Negative value for jumping up
@@ -97,20 +114,27 @@ int main() {
     
     // Main game loop
     while (!WindowShouldClose()) {
+        // Update animation
+        timer += GetFrameTime();
+        if (timer >= frameTime) {
+            timer = 0.0f;
+            currentFrame = (int(currentFrame) + 1) % SPRITE_COLUMNS;
+        }
+
         // Boundaries check
-        if (characterX < 0) characterX = 0;  // Prevent moving off the left side
-        if (characterX + characterWidth > screenWidth) 
-            characterX = screenWidth - characterWidth;  // Prevent moving off the right side
-        if (characterY < 0) characterY = 0;  // Prevent moving off the top side
-        if (characterY + characterHeight > screenHeight) 
-            characterY = screenHeight - characterHeight;
+        if (position.x < 0) position.x = 0;  // Prevent moving off the left side
+        if (position.x + characterWidth > screenWidth) 
+            position.x = screenWidth - characterWidth;  // Prevent moving off the right side
+        if (position.y < 0) position.y = 0;  // Prevent moving off the top side
+        if (position.y + characterHeight > screenHeight) 
+            position.y = screenHeight - characterHeight;
 
         // Create movment
         if (!transitioning && !dead) {
-            if (IsKeyDown(KEY_RIGHT)) characterX += movmentSpeed;  // Move right
-            if (IsKeyDown(KEY_LEFT)) characterX -= movmentSpeed;   // Move left
-            if (IsKeyDown(KEY_DOWN)&& (characterY + characterHeight < screenHeight)) {
-                characterY += movmentSpeed; // Move up
+            if (IsKeyDown(KEY_RIGHT)) position.x += movmentSpeed;  // Move right
+            if (IsKeyDown(KEY_LEFT)) position.x -= movmentSpeed;   // Move left
+            if (IsKeyDown(KEY_DOWN)&& (position.y + characterHeight < screenHeight)) {
+                position.y += movmentSpeed; // Move up
             }
 
             // Jumping input
@@ -137,8 +161,8 @@ int main() {
                     seekingEnemy2 = { 1350, 100, 75, 75};
                     currentScene = SCENE_ONE;
                 }
-                characterX = 100.0f;  // Move character to the next level's starting position
-                characterY = groundLevel;
+                position.x = 100.0f;  // Move character to the next level's starting position
+                position.y = groundLevel;
                 alpha = 1.0f;  // Cap alpha to fully opaque
                 transitioning = false;
             }
@@ -151,8 +175,8 @@ int main() {
             if (alpha2 >= 1.0f) {
             
                 currentScene = SCENE_ONE;
-                characterX = 100.0f;  // Move character to the next level's starting position
-                characterY = groundLevel;
+                position.x = 100.0f;  // Move character to the next level's starting position
+                position.y = groundLevel;
                 alpha2 = 1.0f;  // Cap alpha to fully opaque
                 dead = false;
             }
@@ -165,7 +189,7 @@ int main() {
         onPlatform = false;
         // Apply gravity
         if (isJumping) {
-            characterY += verticalVelocity;
+            position.y += verticalVelocity;
             verticalVelocity += gravity;  // Accelerate falling due to gravity
             
             onPlatform = false;
@@ -173,12 +197,12 @@ int main() {
             // Check if character lands on a platform
             if (currentScene == SCENE_ONE) {
                 for (int i = 0; i < platformCount1; i++) {
-                    if (characterX + characterWidth > platforms1[i].x &&
-                        characterX < platforms1[i].x + platforms1[i].width &&
-                        characterY + characterHeight >= platforms1[i].y &&
-                        characterY + characterHeight - verticalVelocity <= platforms1[i].y) {
+                    if (position.x + characterWidth > platforms1[i].x &&
+                        position.x < platforms1[i].x + platforms1[i].width &&
+                        position.y + characterHeight >= platforms1[i].y &&
+                        position.y + characterHeight - verticalVelocity <= platforms1[i].y) {
                         // Landed on the platform
-                        characterY = platforms1[i].y - characterHeight;
+                        position.y = platforms1[i].y - characterHeight;
                         isJumping = false;
                         verticalVelocity = 0.0f;
                         onPlatform = true;
@@ -188,12 +212,12 @@ int main() {
             }
             if (currentScene == SCENE_TWO) {
                 for (int i = 0; i < platformCount2; i++) {
-                    if (characterX + characterWidth > platforms2[i].x &&
-                        characterX < platforms2[i].x + platforms2[i].width &&
-                        characterY + characterHeight >= platforms2[i].y &&
-                        characterY + characterHeight - verticalVelocity <= platforms2[i].y) {
+                    if (position.x + characterWidth > platforms2[i].x &&
+                        position.x < platforms2[i].x + platforms2[i].width &&
+                        position.y + characterHeight >= platforms2[i].y &&
+                        position.y + characterHeight - verticalVelocity <= platforms2[i].y) {
                         // // Landed on the platform
-                        characterY = platforms2[i].y - characterHeight;
+                        position.y = platforms2[i].y - characterHeight;
                         isJumping = false;
                         verticalVelocity = 0.0f;
                         onPlatform = true;
@@ -204,12 +228,12 @@ int main() {
 
             if (currentScene == SCENE_THREE) {
                 for (int i = 0; i < platformCount3; i++) {
-                    if (characterX + characterWidth > platforms3[i].x &&
-                        characterX < platforms3[i].x + platforms3[i].width &&
-                        characterY + characterHeight >= platforms3[i].y &&
-                        characterY + characterHeight - verticalVelocity <= platforms3[i].y){
+                    if (position.x + characterWidth > platforms3[i].x &&
+                        position.x < platforms3[i].x + platforms3[i].width &&
+                        position.y + characterHeight >= platforms3[i].y &&
+                        position.y + characterHeight - verticalVelocity <= platforms3[i].y){
                         // // Landed on the platform
-                        characterY = platforms3[i].y - characterHeight;
+                        position.y = platforms3[i].y - characterHeight;
                         isJumping = false;
                         verticalVelocity = 0.0f;
                         onPlatform = true;
@@ -224,8 +248,8 @@ int main() {
             }
 
             // Check if the character has landed on the ground
-            if (characterY >= groundLevel) {
-                characterY = groundLevel;  // Ensure character stays on the ground
+            if (position.y >= groundLevel) {
+                position.y = groundLevel;  // Ensure character stays on the ground
                 isJumping = false;         // Stop jumping
                 verticalVelocity = 0.0f;   // Reset vertical velocity
             }
@@ -235,16 +259,16 @@ int main() {
         // Position checks for scene one
         if (currentScene == SCENE_ONE) {
             for (int i = 0; i < platformCount1; i++) {
-                if (characterX + characterWidth > platforms1[i].x &&  // Character's right side past platform's left
-                    characterX < platforms1[i].x + platforms1[i].width &&  // Character's left side before platform's right
-                    characterY + characterHeight >= platforms1[i].y &&  // Character's feet are at or below platform's top
-                    characterY + characterHeight <= platforms1[i].y + 5) {
+                if (position.x + characterWidth > platforms1[i].x &&  // Character's right side past platform's left
+                    position.x < platforms1[i].x + platforms1[i].width &&  // Character's left side before platform's right
+                    position.y + characterHeight >= platforms1[i].y &&  // Character's feet are at or below platform's top
+                    position.y + characterHeight <= platforms1[i].y + 5) {
                     // // Landed on the platform
                     onPlatform = true;
                 }
             }
             if (!onPlatform) {
-                characterY += 1.0f;
+                position.y += 1.0f;
             }
             // Move the enemy
             if (walkingEnemy.x == 0) {
@@ -281,18 +305,18 @@ int main() {
             }
 
             // Check if at door
-            if (AtOject({characterX, characterY, characterWidth, characterHeight}, door)) {
+            if (AtOject({position.x, position.y, characterWidth, characterHeight}, door)) {
                 transitioning = true;
             }
 
             // Check if at walking enemy
-            if (AtOject({characterX, characterY, characterWidth, characterHeight}, walkingEnemy)) {
+            if (AtOject({position.x, position.y, characterWidth, characterHeight}, walkingEnemy)) {
                 dead = true;
             }
 
             // Check if hit shooters
             for (int i = 0; i < shootercount; i++) {
-                if (AtOject({characterX, characterY, characterWidth, characterHeight}, shooters[i])) {
+                if (AtOject({position.x, position.y, characterWidth, characterHeight}, shooters[i])) {
                     dead = true;
                 }
                 
@@ -302,19 +326,19 @@ int main() {
         // Position checks for scene two
         if (currentScene == SCENE_TWO) {
             for (int i = 0; i < platformCount2; i++) {
-                if (characterX + characterWidth > platforms2[i].x &&  // Character's right side past platform's left
-                    characterX < platforms2[i].x + platforms2[i].width &&  // Character's left side before platform's right
-                    characterY + characterHeight >= platforms2[i].y &&  // Character's feet are at or below platform's top
-                    characterY + characterHeight <= platforms2[i].y + 5) {
+                if (position.x + characterWidth > platforms2[i].x &&  // Character's right side past platform's left
+                    position.x < platforms2[i].x + platforms2[i].width &&  // Character's left side before platform's right
+                    position.y + characterHeight >= platforms2[i].y &&  // Character's feet are at or below platform's top
+                    position.y + characterHeight <= platforms2[i].y + 5) {
                     // // Landed on the platform
                     onPlatform = true;
                 }
             }
             if (!onPlatform) {
-                characterY += 1.0f;
+                position.y += 1.0f;
             }
             // Check if at door
-            if (AtOject({characterX, characterY, characterWidth, characterHeight}, door2)) {
+            if (AtOject({position.x, position.y, characterWidth, characterHeight}, door2)) {
                 transitioning = true;
             }
         
@@ -322,47 +346,47 @@ int main() {
         // Position checks for scene three
         if (currentScene == SCENE_THREE) {
             for (int i = 0; i < platformCount3; i++) {
-                if (characterX + characterWidth > platforms3[i].x &&  // Character's right side past platform's left
-                    characterX < platforms3[i].x + platforms3[i].width &&  // Character's left side before platform's right
-                    characterY + characterHeight >= platforms3[i].y &&  // Character's feet are at or below platform's top
-                    characterY + characterHeight <= platforms3[i].y + 5) {
+                if (position.x + characterWidth > platforms3[i].x &&  // Character's right side past platform's left
+                    position.x < platforms3[i].x + platforms3[i].width &&  // Character's left side before platform's right
+                    position.y + characterHeight >= platforms3[i].y &&  // Character's feet are at or below platform's top
+                    position.y + characterHeight <= platforms3[i].y + 5) {
                     // // Landed on the platform
                     onPlatform = true;
                 }
             }
 
             if (!onPlatform) {
-                characterY += 1.0f;
+                position.y += 1.0f;
             }
             
             // Move the seekingEnemy
-            if (seekingEnemy.x < characterX) {
+            if (seekingEnemy.x < position.x) {
                 seekingEnemy.x += seekingenemySpeed;  // Move right
-            } else if (seekingEnemy.x > characterX) {
+            } else if (seekingEnemy.x > position.x) {
                 seekingEnemy.x -= seekingenemySpeed;  // Move left
             }
 
-            if (seekingEnemy.y < characterY) {
+            if (seekingEnemy.y < position.y) {
                 seekingEnemy.y += seekingenemySpeed;  // Move down
-            } else if (seekingEnemy.y > characterY) {
+            } else if (seekingEnemy.y > position.y) {
                 seekingEnemy.y -= seekingenemySpeed;  // Move up
             }
 
             // Enemy2
-            if (seekingEnemy2.x < characterX) {
+            if (seekingEnemy2.x < position.x) {
                 seekingEnemy2.x += seekingenemySpeed;  // Move right
-            } else if (seekingEnemy2.x > characterX) {
+            } else if (seekingEnemy2.x > position.x) {
                 seekingEnemy2.x -= seekingenemySpeed;  // Move left
             }
 
-            if (seekingEnemy2.y < characterY) {
+            if (seekingEnemy2.y < position.y) {
                 seekingEnemy2.y += seekingenemySpeed;  // Move down
-            } else if (seekingEnemy2.y > characterY) {
+            } else if (seekingEnemy2.y > position.y) {
                 seekingEnemy2.y -= seekingenemySpeed;  // Move up
             }
 
-            if(AtOject({characterX, characterY, characterWidth, characterHeight}, seekingEnemy) || 
-            AtOject({characterX, characterY, characterWidth, characterHeight}, seekingEnemy2)) {
+            if(AtOject({position.x, position.y, characterWidth, characterHeight}, seekingEnemy) || 
+            AtOject({position.x, position.y, characterWidth, characterHeight}, seekingEnemy2)) {
                 dead = true;
             }
 
@@ -382,8 +406,12 @@ int main() {
                 DrawRectangleRec(platforms1[i], DARKGRAY);
             }
 
+            // Draw current sprite frame
+            Rectangle source = { frameWidth * currentFrame, 0, frameWidth, frameHeight };
+            Rectangle dest = { position.x, position.y, frameWidth * SPRITE_SCALE, frameHeight * SPRITE_SCALE };
+            DrawTexturePro(spriteSheet, source, dest, (Vector2){0, 0}, 0, WHITE);
+
             // Create rectangles
-            DrawRectangle(characterX, characterY, characterWidth, characterHeight, BLACK);
             DrawRectangleRec(door, RED);
             DrawRectangleRec(walkingEnemy, MAROON);
             
@@ -398,15 +426,19 @@ int main() {
         }
         else if(currentScene == SCENE_TWO) {
             // Make Background
-            ClearBackground(GRAY);
+            ClearBackground(WHITE);
 
             // Draw platforms2
             for (int i = 0; i < platformCount2; i++) {
                 DrawRectangleRec(platforms2[i], RED);
             }
 
-            // Create rectangles
-            DrawRectangle(characterX, characterY, characterWidth, characterHeight, BLACK);
+            // Draw current sprite frame
+            Rectangle source = { frameWidth * currentFrame, 0, frameWidth, frameHeight };
+            Rectangle dest = { position.x, position.y, frameWidth * SPRITE_SCALE, frameHeight * SPRITE_SCALE };
+            DrawTexturePro(spriteSheet, source, dest, (Vector2){0, 0}, 0, WHITE);
+
+            // Draw second door
             DrawRectangleRec(door2, BLACK);
 
             // Draw Texts
@@ -421,8 +453,10 @@ int main() {
                 DrawRectangleRec(platforms3[i], PURPLE);
             }
 
-            // Create rectangles
-            DrawRectangle(characterX, characterY, characterWidth, characterHeight, BLACK);
+            // Draw current sprite frame
+            Rectangle source = { frameWidth * currentFrame, 0, frameWidth, frameHeight };
+            Rectangle dest = { position.x, position.y, frameWidth * SPRITE_SCALE, frameHeight * SPRITE_SCALE };
+            DrawTexturePro(spriteSheet, source, dest, (Vector2){0, 0}, 0, WHITE);
 
             // Draw seekingEnemy
             DrawRectangleRec(seekingEnemy, MAROON);
@@ -446,6 +480,7 @@ int main() {
     }
 
     // De-Initialization
+    UnloadTexture(spriteSheet);
     CloseWindow();
 
     return 0;
