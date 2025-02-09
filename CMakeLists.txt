@@ -10,8 +10,18 @@ include_directories(${RAYLIB_PATH}/src)
 # Link to the Raylib static library
 link_directories(${RAYLIB_PATH}/build)
 
-# Source code
-add_executable(roguelike main.cpp)
+# Gather all source files
+set(SOURCES 
+    main.cpp
+    src/Game.cpp
+    src/SceneOne.cpp
+    src/SceneTwo.cpp
+    src/WalkingEnemy.cpp
+    src/Character.cpp
+)
+
+# Create the executable
+add_executable(roguelike ${SOURCES})
 
 # Link Raylib static library
 target_link_libraries(roguelike raylib)
