@@ -21,25 +21,30 @@ int main() {
     // Set FPS
     SetTargetFPS(60);
 
+    // Load backgrounds
+    Texture2D backgroundL1 = LoadTexture("../assets/Backgrounds/background_0.png");
+    Texture2D backgroundL2 = LoadTexture("../assets/Backgrounds/background_1.png");
+    Texture2D backgroundL3 = LoadTexture("../assets/Backgrounds/background_2.png");
+
     // Load sprite sheet
     Texture2D spriteSheet = LoadTexture("../assets/Cat/IdleCatb.png");
-    Texture2D jumpSprite = LoadTexture("../assets/Cat/JumpCatb.png"); 
+    Texture2D jumpSprite = LoadTexture("../assets/Cat/JumpCabt.png"); 
     // Define sprite frame size
     float frameWidth = spriteSheet.width / SPRITE_COLUMNS;
     float frameHeight = spriteSheet.height;
     // Animation variables
     float currentFrame = 0.0f;
-    float frameTime = 0.1f;  // Time per frame
+    float frameTime = 0.05f;  // Time per frame
     float timer = 0.0f;
     // Character position
-    Vector2 position = { screenWidth / 2.0f, screenHeight / 2.0f };
+    Vector2 position = { (screenWidth / 2.0f), (screenHeight / 2.0f) };
 
     // Rectangle attributes
     // float characterX = screenWidth / 2.0f;  // Start in the center
     // float characterY = screenHeight / 2.0f;
     float movmentSpeed = 10.0f;  // Speed of movement
     float characterWidth =  20.0f + (spriteSheet.width / SPRITE_COLUMNS);
-    float characterHeight = (spriteSheet.height * 2) - 5.0f;
+    float characterHeight = ((spriteSheet.height) * 2) - 5.0f;
 
 
     // Variables
@@ -91,7 +96,7 @@ int main() {
 
     // Define door
     Rectangle door = { 1325, 75, 50, 75 };
-    Rectangle door2 = { 100, 25, 50, 75 };
+    Rectangle door2 = { 130, 500, 50, 75 };
 
     // Enemies
     // seekingEnemy starts at x=50, y=100 with width/height 75
@@ -288,7 +293,7 @@ int main() {
             // Fall back down
             else {
                 walkingEnemy.y += jumpingenemyHeight;
-                if (walkingEnemy.y >= groundLevel) {
+                if (walkingEnemy.y >= (700 - 50)) {
                     maxheightReached = false;
                 }
             }
@@ -400,6 +405,13 @@ int main() {
         if (currentScene == SCENE_ONE){
             // Make Background
             ClearBackground(RAYWHITE);
+            // Draw background images
+            float scale = 3.89;
+            Rectangle source2 = {0, 0, 288, 180};
+            Rectangle dest2 = {0, 0, 1400, 700};
+            DrawTexturePro(backgroundL1, source2, dest2, (Vector2){0,0}, 0.0f, WHITE);
+            DrawTexturePro(backgroundL2, source2, dest2, (Vector2){0,0}, 0.0f, WHITE);
+            DrawTexturePro(backgroundL3, source2, dest2, (Vector2){0,0}, 0.0f, WHITE);
 
             // Draw platforms1
             for (int i = 0; i < platformCount1; i++) {
@@ -410,6 +422,7 @@ int main() {
             Rectangle source = { frameWidth * currentFrame, 0, frameWidth, frameHeight };
             Rectangle dest = { position.x, position.y, frameWidth * SPRITE_SCALE, frameHeight * SPRITE_SCALE };
             DrawTexturePro(spriteSheet, source, dest, (Vector2){0, 0}, 0, WHITE);
+            DrawRectangleLines(position.x, position.y,characterWidth, characterHeight, RED );
 
             // Create rectangles
             DrawRectangleRec(door, RED);
@@ -426,7 +439,14 @@ int main() {
         }
         else if(currentScene == SCENE_TWO) {
             // Make Background
-            ClearBackground(WHITE);
+            ClearBackground(RAYWHITE);
+
+            float scale = 3.89;
+            Rectangle source2 = {0, 0, 288, 180};
+            Rectangle dest2 = {0, 0, 1400, 700};
+            DrawTexturePro(backgroundL1, source2, dest2, (Vector2){0,0}, 0.0f, WHITE);
+            DrawTexturePro(backgroundL2, source2, dest2, (Vector2){0,0}, 0.0f, WHITE);
+            DrawTexturePro(backgroundL3, source2, dest2, (Vector2){0,0}, 0.0f, WHITE);
 
             // Draw platforms2
             for (int i = 0; i < platformCount2; i++) {
@@ -446,12 +466,19 @@ int main() {
         }
         else if (currentScene == SCENE_THREE){
             // Make Background
-            ClearBackground(DARKGRAY);
+            ClearBackground(RAYWHITE);
 
             // Draw platforms3
             for (int i = 0; i < platformCount3; i++) {
                 DrawRectangleRec(platforms3[i], PURPLE);
             }
+
+            float scale = 3.89;
+            Rectangle source2 = {0, 0, 288, 180};
+            Rectangle dest2 = {0, 0, 1400, 700};
+            DrawTexturePro(backgroundL1, source2, dest2, (Vector2){0,0}, 0.0f, WHITE);
+            DrawTexturePro(backgroundL2, source2, dest2, (Vector2){0,0}, 0.0f, WHITE);
+            DrawTexturePro(backgroundL3, source2, dest2, (Vector2){0,0}, 0.0f, WHITE);
 
             // Draw current sprite frame
             Rectangle source = { frameWidth * currentFrame, 0, frameWidth, frameHeight };
@@ -481,6 +508,9 @@ int main() {
 
     // De-Initialization
     UnloadTexture(spriteSheet);
+    UnloadTexture(backgroundL1);
+    UnloadTexture(backgroundL2);
+    UnloadTexture(backgroundL3);
     CloseWindow();
 
     return 0;
