@@ -8,6 +8,7 @@
 #include "raylib.h"
 
 class SceneOne : public Scene {
+    
 private:
     static const int platformCount = 5;
     Rectangle platforms[platformCount];
@@ -17,6 +18,7 @@ private:
     Texture2D backgroundL1;
     Texture2D backgroundL2;
     Texture2D backgroundL3;
+    Game* game;
 public:
     SceneOne(Game* game);
     ~SceneOne();

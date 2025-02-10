@@ -19,6 +19,11 @@ void Game::setScene(Scene* newScene) {
     if (currentScene) delete currentScene;  // Clean up old scene
     currentScene = newScene;
 }
+
+Scene* Game::getCurrentScene() const {
+    return currentScene;
+}
+
 bool Game::AtOject(Rectangle rect1, Rectangle rect2) {
     return (rect1.x < rect2.x + rect2.width &&
             rect1.x + rect1.width > rect2.x &&

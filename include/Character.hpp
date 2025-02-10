@@ -1,13 +1,15 @@
 #ifndef CHARACTER_HPP
 #define CHARACTER_HPP
 
+#include "../include/Game.hpp"
 #include "raylib.h"
 
 class Character {
-private:
+protected:
+    Game* game;
 
 public:
-    Character();
+    Character(Game* game);
     ~Character();
     Vector2 getPosition() const;
     void move(Rectangle platforms[], int platformCount);

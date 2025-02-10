@@ -1,6 +1,9 @@
 #include "../include/Character.hpp"
+#include "../include/SceneOne.hpp"
+#include "../include/SceneTwo.hpp"
+#include "../include/SceneThree.hpp"
 
-Character::Character() {
+Character::Character(Game* game) : game(game) {
     spriteSheet = LoadTexture("../assets/Cat/IdleCatb.png");
     sprite_cloumns = 7;
     sprite_Scale = 2.0f;
@@ -62,6 +65,13 @@ void Character::move(Rectangle platforms[], int platformCount) {
     if (transitioning) {
         alpha += 0.02f;  // Increase alpha for fade-out
         if (alpha >= 1.0f) {
+            // Check which scene is next
+            if (dynamic_cast<SceneOne*>(game->getCurrentScene())){
+                game->setScene(new SceneTwo(game));
+            }
+            else if (dynamic_cast<SceneTwo*>(game->getCurrentScene())) {
+                game->setScene(new SceneThree(game));
+            }
             position.x = 100.0f;  // Move character to the next level's starting position
             position.y = groundLevel;
             alpha = 1.0f;  // Cap alpha to fully opaque
@@ -75,6 +85,7 @@ void Character::move(Rectangle platforms[], int platformCount) {
         if (alpha2 >= 1.0f) {
             position.x = 100.0f;  // Move character to the next level's starting position
             position.y = groundLevel;
+            game->setScene(new SceneOne(game));
             alpha2 = 1.0f;  // Cap alpha to fully opaque
             dead = false;
         }

@@ -14,6 +14,7 @@ private:
     Texture2D backgroundL1;
     Texture2D backgroundL2;
     Texture2D backgroundL3;
+    Game* game;
 public:
     SceneTwo(Game* game);
     ~SceneTwo();

@@ -1,8 +1,9 @@
 #include "../include/SceneTwo.hpp"
 #include "../include/SceneOne.hpp"
+#include "../include/SceneThree.hpp"
 #include "raylib.h"
 
-SceneTwo::SceneTwo(Game* game) : Scene(game) {
+SceneTwo::SceneTwo(Game* game) : Scene(game), game(game), character(game) {
     // Load backgrounds
     backgroundL1 = LoadTexture("../assets/Backgrounds/background_0.png");
     backgroundL2 = LoadTexture("../assets/Backgrounds/background_1.png");
@@ -27,7 +28,7 @@ SceneTwo::~SceneTwo() {
 
 void SceneTwo::update() {
     if (game->AtOject({character.position.x, character.position.y, character.characterWidth, character.characterHeight}, door)) {
-        game->setScene(new SceneOne(game));
+        character.transitioning = true;
     }
     character.move(platforms, platformCount);
 }

@@ -2,8 +2,9 @@
 #include "../include/SceneTwo.hpp"
 #include "../include/Game.hpp"
 #include "../include/WalkingEnemy.hpp"
+#include <iostream>
 
-SceneOne::SceneOne(Game* game) : Scene(game) {
+SceneOne::SceneOne(Game* game) : Scene(game), game(game), character(game) {
     // Load backgrounds
     backgroundL1 = LoadTexture("../assets/Backgrounds/background_0.png");
     backgroundL2 = LoadTexture("../assets/Backgrounds/background_1.png");
@@ -27,7 +28,7 @@ SceneOne::~SceneOne() {
 
 void SceneOne::update() {
     if (game->AtOject({character.position.x, character.position.y, character.characterWidth, character.characterHeight}, door)) {
-        game->setScene(new SceneTwo(game));  // Transition to SceneTwo
+        character.transitioning = true;
     }
     walkingEnemy.move();
     character.move(platforms, platformCount);

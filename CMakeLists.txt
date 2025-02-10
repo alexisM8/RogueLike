@@ -16,7 +16,9 @@ set(SOURCES
     src/Game.cpp
     src/SceneOne.cpp
     src/SceneTwo.cpp
+    src/SceneThree.cpp
     src/WalkingEnemy.cpp
+    src/SeekingEnemy.cpp
     src/Character.cpp
 )
 
