@@ -4,7 +4,7 @@ A simple 2D roguelike game built using [Raylib](https://www.raylib.com/).
 
 ## Description
 
-This is a 2D action-adventure game built with Raylib, where you control a character that navigates through platforms, jumps, and avoids or defeats enemies. The game features smooth character movement, gravity, and platform detection, with multiple levels and scene transitions. You will face different types of enemies while navigating challenging environments, with fade effects and boundaries to keep you within the playable area.
+This is a 2D action-adventure game built with Raylib, where you control a character that navigates through platforms, jumps, and avoids enemies. The game features smooth character movement, gravity, and platform detection, with multiple levels and scene transitions. You will face different types of enemies while navigating challenging environments, with fade effects and boundaries to keep you within the playable area.
 
 ## Project Features
 
