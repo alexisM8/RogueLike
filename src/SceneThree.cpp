@@ -18,7 +18,7 @@ SceneThree::SceneThree(Game* game)
     door = { 130, 500, 50, 75 };
 
     // Initialize the platforms
-    platforms[0] = { 400, 500, 500, 20 };
+    platforms[0] = { 400, 550, 500, 20 };
 }
 
 SceneThree::~SceneThree() {

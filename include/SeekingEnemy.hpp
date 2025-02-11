@@ -10,7 +10,7 @@ private:
     float seekingenemySpeed;
     
 public:
-    SeekingEnemy(Vector2 startpos);
+    SeekingEnemy(Vector2 startPos);
     ~SeekingEnemy();
     Rectangle getPosition() const;
     void move(Vector2 charPosition);

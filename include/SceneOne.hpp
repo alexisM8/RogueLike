@@ -5,6 +5,7 @@
 #include "Game.hpp"
 #include "WalkingEnemy.hpp"
 #include "Character.hpp"
+#include "ShooterEnemy.hpp"
 #include "raylib.h"
 
 class SceneOne : public Scene {
@@ -12,9 +13,13 @@ class SceneOne : public Scene {
 private:
     static const int platformCount = 5;
     Rectangle platforms[platformCount];
-    WalkingEnemy walkingEnemy;
-    Character character;
     Rectangle door;
+
+    Character character;
+
+    WalkingEnemy walkingEnemy;
+    ShooterEnemy shooterEnemy1;
+
     Texture2D backgroundL1;
     Texture2D backgroundL2;
     Texture2D backgroundL3;

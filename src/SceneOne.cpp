@@ -4,7 +4,11 @@
 #include "../include/WalkingEnemy.hpp"
 #include <iostream>
 
-SceneOne::SceneOne(Game* game) : Scene(game), game(game), character(game) {
+SceneOne::SceneOne(Game* game) 
+    : Scene(game), game(game), 
+    character(game),
+    shooterEnemy1(Vector2{1350, 475})
+{
     // Load backgrounds
     backgroundL1 = LoadTexture("../assets/Backgrounds/background_0.png");
     backgroundL2 = LoadTexture("../assets/Backgrounds/background_1.png");
@@ -32,7 +36,11 @@ void SceneOne::update() {
     }
     walkingEnemy.move();
     character.move(platforms, platformCount);
+    shooterEnemy1.move();
     if (game->AtOject({character.position.x, character.position.y, character.characterWidth, character.characterHeight}, walkingEnemy.getPosition())) {
+        character.dead = true;
+    }
+    if (game->AtOject({character.position.x, character.position.y, character.characterWidth, character.characterHeight}, shooterEnemy1.getPosition())) {
         character.dead = true;
     }
     
@@ -62,6 +70,7 @@ void SceneOne::render() {
     // Draw Enemies
     DrawRectangleRec(door, RED);
     DrawRectangleRec(walkingEnemy.position, MAROON);
+    DrawRectangleRec(shooterEnemy1.getPosition(), GREEN);
     
     // Draw Texts
     DrawText("Use arrow keys to move!", 10, 10, 20, DARKGRAY);
