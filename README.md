@@ -6,17 +6,30 @@ A simple 2D roguelike game built using [Raylib](https://www.raylib.com/).
 
 This is a roguelike game where you can move a character around a grid using the arrow keys. The game is built with Raylib and features multiple levels, platforms, and enemies.
 
-## Features
+## Project Features
 
-- **Basic character movement** with arrow keys.
-- **Jumping mechanics** with gravity and platform detection.
-- **Multiple levels** with transitions between scenes.
-- **Platforms** to jump on and navigate through.
-- **Seeking enemies** that chase the player.
-- **Collision detection** for platforms, doors, and enemies.
-- **Fade transitions** between levels.
-- **Boundaries** to prevent the character from going off-screen.
-- **Simple 2D graphical representation** of the character, platforms, and enemies.
+### Character Movement & Physics
+- Smooth movement using arrow keys.
+- Jumping mechanics with gravity and platform collision detection.
+
+### Level & Scene Management
+- Multiple scenes with transitions between levels.
+- Fade effects for seamless level changes.
+- Boundaries to keep the character within the playable area.
+
+### Environment & Interaction
+- Platforms for navigation and strategic movement.
+- Doors for transitioning between scenes.
+- Collision detection for platforms, enemies, and interactive objects.
+
+### Enemies & Challenges
+- Walking and shooting enemies with different movement behaviors.
+- Enemy collision detection that affects the player's status (e.g., death or respawn).
+
+### Graphics & Visuals
+- Simple 2D sprite-based representation of the character, enemies, and environment.
+- Background layers for added depth.
+- Scaled textures and animations for a polished visual experience.
 
 ## Requirements
 
