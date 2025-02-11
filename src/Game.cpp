@@ -30,6 +30,12 @@ bool Game::AtOject(Rectangle rect1, Rectangle rect2) {
             rect1.y < rect2.y + rect2.height &&
             rect1.y + rect1.height > rect2.y);
 }
+void Game::cleanup() {
+    if (currentScene) {
+        delete currentScene;
+        currentScene = nullptr;
+    }
+}
 
 void Game::run() {
     InitWindow(screenWidth, screenHeight, "Meowficant!!");
@@ -38,6 +44,7 @@ void Game::run() {
     SetTargetFPS(60);
 
     while (!WindowShouldClose()) {
+        if (IsKeyPressed(KEY_ESCAPE)) break;
         BeginDrawing();
         ClearBackground(RAYWHITE);
         if (currentScene) {
@@ -47,6 +54,6 @@ void Game::run() {
 
         EndDrawing();
     }
-
+    cleanup();
     CloseWindow();
 }

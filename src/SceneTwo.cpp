@@ -58,7 +58,7 @@ void SceneTwo::render() {
     DrawRectangleRec(door, RED);
 
     // Draw Texts
-    DrawText("Welcome to Scene 2!", 10, 10, 20, RED);
+    DrawText("Welcome to Scene 2!", 10, 10, 20, DARKPURPLE);
 
     // Draw fade effect
     if (character.alpha > 0.0f || character.alpha2 > 0.0f) {

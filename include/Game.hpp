@@ -6,23 +6,25 @@
 
 class Game {
 public:
-    Game();       // Constructor
-    ~Game();      // Destructor
+    Game(); // Constructor
+    ~Game(); // Destructor
     void run(); // Game loop
     void setScene(Scene* newScene); // Set Scene
     bool AtOject(Rectangle rect1, Rectangle rect2); // Collision check
+    void cleanup();
     Scene* getCurrentScene() const; // Return current scene
 
     // Screen variables
     int screenWidth = 1400;
     int screenHeight = 700;
+
+    bool running;
     
 private:
     void init();  // Initialization
     void update(); // Update logic
     void draw();  // Render frame
 
-    bool running;
     
     // Textures
     Texture2D spriteSheet;

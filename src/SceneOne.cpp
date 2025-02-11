@@ -6,7 +6,6 @@
 
 SceneOne::SceneOne(Game* game) 
     : Scene(game), game(game), 
-    character(game),
     shooterEnemy1(Vector2{1350, 475})
 {
     // Load backgrounds
@@ -14,6 +13,8 @@ SceneOne::SceneOne(Game* game)
     backgroundL2 = LoadTexture("../assets/Backgrounds/background_1.png");
     backgroundL3 = LoadTexture("../assets/Backgrounds/background_2.png");
     
+    character = new Character(game);
+
     // Create door
     door = { 1325, 75, 50, 75 };
 
@@ -25,23 +26,24 @@ SceneOne::SceneOne(Game* game)
     platforms[4] = { 1300, 150, 100, 20 };
 }
 SceneOne::~SceneOne() {
+    delete character;
     UnloadTexture(backgroundL1);
     UnloadTexture(backgroundL2);
     UnloadTexture(backgroundL3);
 }
 
 void SceneOne::update() {
-    if (game->AtOject({character.position.x, character.position.y, character.characterWidth, character.characterHeight}, door)) {
-        character.transitioning = true;
+    if (game->AtOject({character->position.x, character->position.y, character->characterWidth, character->characterHeight}, door)) {
+        character->transitioning = true;
     }
     walkingEnemy.move();
-    character.move(platforms, platformCount);
+    character->move(platforms, platformCount);
     shooterEnemy1.move();
-    if (game->AtOject({character.position.x, character.position.y, character.characterWidth, character.characterHeight}, walkingEnemy.getPosition())) {
-        character.dead = true;
+    if (game->AtOject({character->position.x, character->position.y, character->characterWidth, character->characterHeight}, walkingEnemy.getPosition())) {
+        character->dead = true;
     }
-    if (game->AtOject({character.position.x, character.position.y, character.characterWidth, character.characterHeight}, shooterEnemy1.getPosition())) {
-        character.dead = true;
+    if (game->AtOject({character->position.x, character->position.y, character->characterWidth, character->characterHeight}, shooterEnemy1.getPosition())) {
+        character->dead = true;
     }
     
 }
@@ -63,9 +65,9 @@ void SceneOne::render() {
     }
 
     // Draw character
-    Rectangle source = { character.frameWidth * character.currentFrame, 0, character.frameWidth, character.frameHeight };
-    Rectangle dest = { character.position.x, character.position.y, character.frameWidth * character.sprite_Scale, character.frameHeight * character.sprite_Scale };
-    DrawTexturePro(character.spriteSheet, source, dest, (Vector2){0, 0}, 0, WHITE);
+    Rectangle source = { character->frameWidth * character->currentFrame, 0, character->frameWidth, character->frameHeight };
+    Rectangle dest = { character->position.x, character->position.y, character->frameWidth * character->sprite_Scale, character->frameHeight * character->sprite_Scale };
+    DrawTexturePro(character->spriteSheet, source, dest, (Vector2){0, 0}, 0, WHITE);
 
     // Draw Enemies
     DrawRectangleRec(door, RED);
@@ -73,14 +75,14 @@ void SceneOne::render() {
     DrawRectangleRec(shooterEnemy1.getPosition(), GREEN);
     
     // Draw Texts
-    DrawText("Use arrow keys to move!", 10, 10, 20, DARKGRAY);
-    DrawText("Press SPACE to Jump!", 10, 30, 20, DARKGRAY);
+    DrawText("Use arrow keys to move!", 10, 10, 20, DARKPURPLE);
+    DrawText("Press SPACE to Jump!", 10, 30, 20, DARKPURPLE);
 
     // Draw fade effect
-    if (character.alpha > 0.0f || character.alpha2 > 0.0f) {
-        DrawRectangle(0, 0, game->screenWidth, game->screenHeight, Fade(BLACK, character.alpha));
+    if (character->alpha > 0.0f || character->alpha2 > 0.0f) {
+        DrawRectangle(0, 0, game->screenWidth, game->screenHeight, Fade(BLACK, character->alpha));
     }
-    if (character.alpha2 > 0.0f) {
-        DrawRectangle(0, 0, 1400, 700, Fade(BLACK, character.alpha2));
+    if (character->alpha2 > 0.0f) {
+        DrawRectangle(0, 0, 1400, 700, Fade(BLACK, character->alpha2));
     }
 }

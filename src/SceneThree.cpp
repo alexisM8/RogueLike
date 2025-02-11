@@ -18,7 +18,7 @@ SceneThree::SceneThree(Game* game)
     door = { 130, 500, 50, 75 };
 
     // Initialize the platforms
-    platforms[0] = { 400, 550, 500, 20 };
+    platforms[0] = { 400, 575, 500, 20 };
 }
 
 SceneThree::~SceneThree() {
@@ -69,7 +69,7 @@ void SceneThree::render() {
     DrawRectangleRec(seekingEnemy2.getPosition(), MAROON);
 
     // Draw Texts
-    DrawText("Good luck!", 10, 10, 20, PURPLE);
+    DrawText("Good luck!", 10, 10, 20, DARKPURPLE);
 
     // Draw fade effect
     if (character.alpha > 0.0f || character.alpha2 > 0.0f) {
