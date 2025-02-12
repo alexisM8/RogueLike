@@ -3,31 +3,44 @@
 #include "../include/SceneTwo.hpp"
 #include "../include/SceneThree.hpp"
 
+// Constants
+constexpr float SCREEN_WIDTH = 1400.0f;
+constexpr float SCREEN_HEIGHT = 700.0f;
+constexpr float CHARACTER_SCALE = 2.0f;
+constexpr float MOVEMENT_SPEED = 12.5f;
+constexpr float JUMP_SPEED = -12.5f;
+constexpr float GRAVITY = 0.5f;
+constexpr float FALL_SPEED = 0.0f;
+constexpr float GROUND_OFFSET = 5.0f; // Offset adjustment for ground-level calculation
+constexpr float ALPHA_INCREMENT = 0.02f;
+
 Character::Character(Game* game) : game(game) {
     spriteSheet = LoadTexture("../assets/Cat/IdleCatb.png");
-    sprite_cloumns = 7;
-    sprite_Scale = 2.0f;
-    frameWidth = spriteSheet.width / sprite_cloumns;
+    spriteColumns = 7;
+    spriteScale = CHARACTER_SCALE;
+    frameWidth = spriteSheet.width / spriteColumns;
     frameHeight = spriteSheet.height;
     currentFrame = 0.0f;
     frameTime = 0.05f;
     timer = 0.0f;
-    position = { (1400 / 2.0f), (700 / 2.0f) };
-    movmentSpeed = 12.5f;
-    characterWidth =  20.0f + (spriteSheet.width / sprite_cloumns);
-    characterHeight = ((spriteSheet.height) * 2) - 5.0f;
-    jumpSpeed = -12.5f;
-    gravity = 0.5f;      // Gravity pulling down
+    position = { SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f };
+    movementSpeed = MOVEMENT_SPEED;
+    characterWidth =  20.0f + (spriteSheet.width / spriteColumns);
+    characterHeight = (spriteSheet.height * CHARACTER_SCALE) - GROUND_OFFSET;
+    jumpSpeed = JUMP_SPEED;
+    gravity = GRAVITY;
     verticalVelocity = 0.0f;
-    fallSpeed = 0.0f; // Speed of falling
-    isJumping = false;   // Flag to check if character is in the air
-    groundLevel = 700 - characterHeight;  // Ground level
-    onPlatform = false; // Is character on platform
-    alpha = 0.0f;       // Transparency value for fade effect
-    alpha2 = 0.0f; // Fade effect for death
-    transitioning = false;  // Flag for the transition
+    fallSpeed = FALL_SPEED;
+    isJumping = false;
+    groundLevel = SCREEN_HEIGHT - characterHeight;
+    onPlatform = false;
+    alpha = 0.0f;
+    alpha2 = 0.0f;
+    transitioning = false;
     dead = false;
 }
+
+
 Character::~Character() {
     UnloadTexture(spriteSheet);
 }
@@ -37,7 +50,7 @@ void Character::move(Rectangle platforms[], int platformCount) {
     timer += GetFrameTime();
     if (timer >= frameTime) {
         timer = 0.0f;
-        currentFrame = (int(currentFrame) + 1) % sprite_cloumns;
+        currentFrame = (int(currentFrame) + 1) % spriteColumns;
     }
     // Boundaries check
     if (position.x < 0) position.x = 0;  // Prevent moving off the left side
@@ -47,12 +60,12 @@ void Character::move(Rectangle platforms[], int platformCount) {
     if (position.y + characterHeight > 700) 
         position.y = 700 - characterHeight;
 
-    // Create movment
+    // Create movement
     if (!transitioning && !dead) {
-        if (IsKeyDown(KEY_RIGHT)) position.x += movmentSpeed;  // Move right
-        if (IsKeyDown(KEY_LEFT)) position.x -= movmentSpeed;   // Move left
+        if (IsKeyDown(KEY_RIGHT)) position.x += movementSpeed;  // Move right
+        if (IsKeyDown(KEY_LEFT)) position.x -= movementSpeed;   // Move left
         if (IsKeyDown(KEY_DOWN)&& (position.y + characterHeight < 700)) {
-            position.y += movmentSpeed; // Move up
+            position.y += movementSpeed; // Move up
         }
 
         // Jumping input

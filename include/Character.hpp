@@ -14,15 +14,15 @@ public:
     Vector2 getPosition() const;
     void move(Rectangle platforms[], int platformCount);
     Texture2D spriteSheet;
-    int sprite_cloumns;
-    float sprite_Scale;
+    int spriteColumns;
+    float spriteScale;
     float frameWidth;
     float frameHeight;
     float currentFrame;
     float frameTime;
     float timer;
     Vector2 position;
-    float movmentSpeed;
+    float movementSpeed;
     float characterWidth;
     float characterHeight;
     float jumpSpeed;  // Negative value for jumping up

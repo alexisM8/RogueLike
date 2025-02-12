@@ -51,7 +51,7 @@ void SceneTwo::render() {
 
     // Draw character
     Rectangle source = { character.frameWidth * character.currentFrame, 0, character.frameWidth, character.frameHeight };
-    Rectangle dest = { character.position.x, character.position.y, character.frameWidth * character.sprite_Scale, character.frameHeight * character.sprite_Scale };
+    Rectangle dest = { character.position.x, character.position.y, character.frameWidth * character.spriteScale, character.frameHeight * character.spriteScale };
     DrawTexturePro(character.spriteSheet, source, dest, (Vector2){0, 0}, 0, WHITE);
 
     // Draw rectangles
