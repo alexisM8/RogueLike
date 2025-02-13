@@ -2,6 +2,7 @@
 #include "../include/SceneOne.hpp"
 #include "../include/SceneTwo.hpp"
 #include "../include/SceneThree.hpp"
+#include <random>
 
 // Constants
 constexpr float CHARACTER_SCALE = 2.0f;
@@ -13,15 +14,7 @@ constexpr float GROUND_OFFSET = 5.0f; // Offset adjustment for ground-level calc
 constexpr float ALPHA_INCREMENT = 0.02f;
 
 Character::Character(Game* game) : game(game) {
-    spriteSheet = LoadTexture("../assets/Cat/IdleCatb.png");
-    spriteColumns = 7;
-    spriteScale = CHARACTER_SCALE;
-    frameWidth = spriteSheet.width / spriteColumns;
-    frameHeight = spriteSheet.height;
-    currentFrame = 0.0f;
-    frameTime = 0.05f;
-    timer = 0.0f;
-    position = { game->screenWidth / 2.0f, game->screenHeight / 2.0f };
+    this->load();
     movementSpeed = MOVEMENT_SPEED;
     characterWidth =  20.0f + (spriteSheet.width / spriteColumns);
     characterHeight = (spriteSheet.height * CHARACTER_SCALE) - GROUND_OFFSET;
@@ -38,11 +31,44 @@ Character::Character(Game* game) : game(game) {
     dead = false;
 }
 
-
 Character::~Character() {
     UnloadTexture(spriteSheet);
 }
 
+void Character::load() {
+    // Initialize random engine with a random seed
+    std::random_device rd;  
+    std::mt19937 gen(rd()); // Mersenne Twister engine
+    std::uniform_int_distribution<int> dist(1, 4);
+
+    // Generate the random number
+    int randomNumber = dist(gen);
+    // Cat picker
+    switch (randomNumber) {
+        case 1:
+            spriteSheet = LoadTexture("../assets/Cat/IdleCatb.png");
+            break;
+        case 2:
+            spriteSheet = LoadTexture("../assets/Cat/IdleCatt.png");
+            break;
+        case 3:
+            spriteSheet = LoadTexture("../assets/Cat/IdleCatd.png");
+            break;
+        case 4:
+            spriteSheet = LoadTexture("../assets/Cat/IdleCattt.png");
+            break;
+        default:
+            spriteSheet = LoadTexture("../assets/Cat/IdleCatb.png");
+    }
+    spriteColumns = 7;
+    spriteScale = CHARACTER_SCALE;
+    frameWidth = spriteSheet.width / spriteColumns;
+    frameHeight = spriteSheet.height;
+    currentFrame = 0.0f;
+    frameTime = 0.05f;
+    timer = 0.0f;
+    position = { game->screenWidth / 2.0f, game->screenHeight / 2.0f };
+}
 
 void Character::move(Rectangle platforms[], int platformCount) {
     timer += GetFrameTime();

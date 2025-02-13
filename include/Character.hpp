@@ -13,6 +13,7 @@ public:
     ~Character();
     Vector2 getPosition() const;
     void move(Rectangle platforms[], int platformCount);
+    void load();
     Texture2D spriteSheet;
     int spriteColumns;
     float spriteScale;
