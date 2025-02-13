@@ -21,6 +21,7 @@ set(SOURCES
     src/SeekingEnemy.cpp
     src/ShooterEnemy.cpp
     src/Character.cpp
+    src/MainScreen.cpp
 )
 
 # Create the executable

@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include "Scene.hpp"
+#include "../include/MainScreen.hpp"
 
 class Game {
 public:
@@ -19,11 +20,12 @@ public:
     int screenHeight = 700;
 
     bool running;
+    bool firstRun;
+
     
 private:
-    void init();  // Initialization
-    void update(); // Update logic
-    void draw();  // Render frame
+    void init(); 
+    void update(); 
 
     
     // Textures
@@ -36,6 +38,7 @@ private:
     
     // Game state
     Scene* currentScene;
+    MainScreen* mainSceen;
 };
 
 #endif

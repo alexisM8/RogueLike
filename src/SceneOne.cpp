@@ -2,7 +2,6 @@
 #include "../include/SceneTwo.hpp"
 #include "../include/Game.hpp"
 #include "../include/WalkingEnemy.hpp"
-#include <iostream>
 
 SceneOne::SceneOne(Game* game) 
     : Scene(game), game(game), 
