@@ -4,14 +4,8 @@ project(Roguelike)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_BUILD_TYPE Release)
 
-# Set the path to the Raylib folder
-set(RAYLIB_PATH ${CMAKE_SOURCE_DIR}/raylib)
-
-# Add Raylib with correct flags
-add_subdirectory(${RAYLIB_PATH})
-
-# Include the Raylib headers
-include_directories(${RAYLIB_PATH}/src)
+# Find Raylib installed on the system
+find_package(raylib REQUIRED)
 
 # Gather all source files
 set(SOURCES 
@@ -30,8 +24,5 @@ set(SOURCES
 # Create the executable
 add_executable(roguelike ${SOURCES})
 
-# Link Raylib static library
+# Link with Raylib
 target_link_libraries(roguelike raylib)
-
-
-
