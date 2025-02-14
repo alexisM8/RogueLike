@@ -75,6 +75,6 @@ void MainScreen::render(){
     DrawTexturePro(cat4, source, dest, (Vector2){0, 0}, 0, WHITE);
 
     // Draw Texts
-    DrawText("MEOWFICANT!", 150, 75, 150, DARKPURPLE);
+    DrawText("MEOWFICENT!", 150, 75, 150, DARKPURPLE);
     DrawText("Press enter to play!", 400, 400, 50, DARKPURPLE);
 }

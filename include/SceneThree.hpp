@@ -3,14 +3,12 @@
 
 #include "Scene.hpp"
 #include "Game.hpp"
-#include "Character.hpp"
 #include "SeekingEnemy.hpp"
 
 class SceneThree : public Scene {
 private:
     static const int platformCount = 1;
     Rectangle platforms[platformCount];
-    Character character;
     Rectangle door;
 
     SeekingEnemy seekingEnemy1;

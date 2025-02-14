@@ -44,14 +44,19 @@ void Game::cleanup() {
         delete mainSceen;
         mainSceen = nullptr;
     }
+    if (character) {
+        delete character;
+        character = nullptr;
+    }
 }
 
 void Game::run() {
-    InitWindow(screenWidth, screenHeight, "Meowficant!!");
+    InitWindow(screenWidth, screenHeight, "Meowficent!!");
     SetTargetFPS(60);
     // Set first scene
     setScene(new SceneOne(this));
     mainSceen = new MainScreen(this);
+    character = new Character(this);
     mainSceen->load();
     while (!WindowShouldClose()) {
         if (IsKeyPressed(KEY_ESCAPE)) break;

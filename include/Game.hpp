@@ -3,7 +3,10 @@
 
 #include "raylib.h"
 #include "Scene.hpp"
+#include "Character.hpp"
 #include "../include/MainScreen.hpp"
+
+class Character;
 
 class Game {
 public:
@@ -22,6 +25,7 @@ public:
     bool running;
     bool firstRun;
 
+    Character* character;  
     
 private:
     void init(); 

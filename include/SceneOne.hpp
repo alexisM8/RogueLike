@@ -15,8 +15,6 @@ private:
     Rectangle platforms[platformCount];
     Rectangle door;
 
-    Character* character;
-
     WalkingEnemy walkingEnemy;
     ShooterEnemy shooterEnemy1;
 

@@ -5,7 +5,6 @@
 
 SceneThree::SceneThree(Game* game) 
     : Scene(game), game(game), 
-    character(game), 
     seekingEnemy1(Vector2{50, 100}),
     seekingEnemy2(Vector2{1300, 100})
 {
@@ -28,17 +27,17 @@ SceneThree::~SceneThree() {
 }
 
 void SceneThree::update() {
-    if (game->AtOject({character.position.x, character.position.y, character.characterWidth, character.characterHeight}, door)) {
+    if (game->AtOject({game->character->position.x, game->character->position.y, game->character->characterWidth, game->character->characterHeight}, door)) {
         game->setScene(new SceneOne(game));
     }
-    character.move(platforms, platformCount);
-    seekingEnemy1.move(character.getPosition());
-    seekingEnemy2.move(character.getPosition());
-    if (game->AtOject({character.position.x, character.position.y, character.characterWidth, character.characterHeight}, seekingEnemy1.getPosition())) {
-        character.dead = true;
+    game->character->move(platforms, platformCount);
+    seekingEnemy1.move(game->character->getPosition());
+    seekingEnemy2.move(game->character->getPosition());
+    if (game->AtOject({game->character->position.x, game->character->position.y, game->character->characterWidth, game->character->characterHeight}, seekingEnemy1.getPosition())) {
+        game->character->dead = true;
     }
-    if(game->AtOject({character.position.x, character.position.y, character.characterWidth, character.characterHeight}, seekingEnemy2.getPosition())) {
-        character.dead = true;
+    if(game->AtOject({game->character->position.x, game->character->position.y, game->character->characterWidth, game->character->characterHeight}, seekingEnemy2.getPosition())) {
+        game->character->dead = true;
     }
 }
 
@@ -58,10 +57,10 @@ void SceneThree::render() {
         DrawRectangleRec(platforms[i], DARKGRAY);
     }
 
-    // Draw character
-    Rectangle source = { character.frameWidth * character.currentFrame, 0, character.frameWidth, character.frameHeight };
-    Rectangle dest = { character.position.x, character.position.y, character.frameWidth * character.spriteScale, character.frameHeight * character.spriteScale };
-    DrawTexturePro(character.spriteSheet, source, dest, (Vector2){0, 0}, 0, WHITE);
+    // Draw game->character->   
+    Rectangle source = { game->character->frameWidth * game->character->currentFrame, 0, game->character->frameWidth, game->character->frameHeight };
+    Rectangle dest = { game->character->position.x, game->character->position.y, game->character->frameWidth * game->character->spriteScale, game->character->frameHeight * game->character->spriteScale };
+    DrawTexturePro(game->character->spriteSheet, source, dest, (Vector2){0, 0}, 0, WHITE);
     
     // Draw rectangles
     DrawRectangleRec(door, RED);
@@ -72,10 +71,10 @@ void SceneThree::render() {
     DrawText("Good luck!", 10, 10, 20, DARKPURPLE);
 
     // Draw fade effect
-    if (character.alpha > 0.0f || character.alpha2 > 0.0f) {
-        DrawRectangle(0, 0, game->screenWidth, game->screenHeight, Fade(BLACK, character.alpha));
+    if (game->character->alpha > 0.0f || game->character->alpha2 > 0.0f) {
+        DrawRectangle(0, 0, game->screenWidth, game->screenHeight, Fade(BLACK, game->character->alpha));
     }
-    if (character.alpha2 > 0.0f) {
-        DrawRectangle(0, 0, 1400, 700, Fade(BLACK, character.alpha2));
+    if (game->character->alpha2 > 0.0f) {
+        DrawRectangle(0, 0, 1400, 700, Fade(BLACK, game->character->alpha2));
     }
 }
