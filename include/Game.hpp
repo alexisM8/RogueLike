@@ -5,18 +5,19 @@
 #include "Scene.hpp"
 #include "Character.hpp"
 #include "../include/MainScreen.hpp"
+#include "../include/WinScreen.hpp"
 
 class Character;
 
 class Game {
 public:
-    Game(); // Constructor
-    ~Game(); // Destructor
+    Game(); 
+    ~Game(); 
     void run(); // Game loop
     void setScene(Scene* newScene); // Set Scene
     bool AtOject(Rectangle rect1, Rectangle rect2); // Collision check
     void cleanup();
-    Scene* getCurrentScene() const; // Return current scene
+    Scene* getCurrentScene() const;
 
     // Screen variables
     int screenWidth = 1400;
@@ -24,6 +25,7 @@ public:
 
     bool running;
     bool firstRun;
+    bool wonGame;
 
     Character* character;  
     
@@ -43,6 +45,7 @@ private:
     // Game state
     Scene* currentScene;
     MainScreen* mainSceen;
+    WinScreen* winScreen;
 };
 
 #endif

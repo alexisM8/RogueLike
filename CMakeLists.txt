@@ -23,6 +23,7 @@ set(SOURCES
     src/ShooterEnemy.cpp
     src/Character.cpp
     src/MainScreen.cpp
+    src/WinScreen.cpp
 )
 
 # Create the executable

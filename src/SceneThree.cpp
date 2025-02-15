@@ -28,7 +28,7 @@ SceneThree::~SceneThree() {
 
 void SceneThree::update() {
     if (game->AtOject({game->character->position.x, game->character->position.y, game->character->characterWidth, game->character->characterHeight}, door)) {
-        game->setScene(new SceneOne(game));
+        game->wonGame = true;
     }
     game->character->move(platforms, platformCount);
     seekingEnemy1.move(game->character->getPosition());
@@ -68,7 +68,7 @@ void SceneThree::render() {
     DrawRectangleRec(seekingEnemy2.getPosition(), MAROON);
 
     // Draw Texts
-    DrawText("Good luck!", 10, 10, 20, DARKPURPLE);
+    DrawText("Good luck!", 10, 10, 30, DARKPURPLE);
 
     // Draw fade effect
     if (game->character->alpha > 0.0f || game->character->alpha2 > 0.0f) {

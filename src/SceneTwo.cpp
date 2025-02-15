@@ -3,22 +3,23 @@
 #include "../include/SceneThree.hpp"
 #include "raylib.h"
 
-SceneTwo::SceneTwo(Game* game) : Scene(game), game(game) {
+SceneTwo::SceneTwo(Game* game) : Scene(game), game(game),
+    seekingEnemy1(Vector2{1300, 100})
+{
     // Load backgrounds
     backgroundL1 = LoadTexture("../assets/Backgrounds/background_0.png");
     backgroundL2 = LoadTexture("../assets/Backgrounds/background_1.png");
     backgroundL3 = LoadTexture("../assets/Backgrounds/background_2.png");
     
     // Create door
-    door = { 130, 500, 50, 75 };
+    door = { 75, 50, 50, 75 };
     
     // Initialize the platforms
-    platforms[0] = { 1100, 500, 200, 20 };
-    platforms[1] = { 900, 300, 50, 20 };
+    platforms[0] = { 1100, 575, 100, 20 };
+    platforms[1] = { 900, 450, 100, 20 };
     platforms[2] = { 700, 300, 25, 20};
     platforms[3] = { 500, 200, 25, 20};
-    platforms[4] = { 300, 500, 100, 20};
-    platforms[5] = { 100, 150, 50, 20 };
+    platforms[4] = { 75, 125, 50, 20 };
 }
 SceneTwo::~SceneTwo() {
     UnloadTexture(backgroundL1);
@@ -31,6 +32,10 @@ void SceneTwo::update() {
         game->character->transitioning = true;
     }
     game->character->move(platforms, platformCount);
+    seekingEnemy1.move(game->character->getPosition());
+    if (game->AtOject({game->character->position.x, game->character->position.y, game->character->characterWidth, game->character->characterHeight}, seekingEnemy1.getPosition())) {
+        game->character->dead = true;
+    }
 }
 
 void SceneTwo::render() {
@@ -56,9 +61,10 @@ void SceneTwo::render() {
 
     // Draw rectangles
     DrawRectangleRec(door, RED);
+    DrawRectangleRec(seekingEnemy1.getPosition(), MAROON);
 
     // Draw Texts
-    DrawText("Welcome to Scene 2!", 10, 10, 20, DARKPURPLE);
+    DrawText("Welcome to Scene 2!", 10, 10, 30, DARKPURPLE);
 
     // Draw fade effect
     if (game->character->alpha > 0.0f || game->character->alpha2 > 0.0f) {

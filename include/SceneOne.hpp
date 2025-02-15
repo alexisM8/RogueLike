@@ -17,6 +17,8 @@ private:
 
     WalkingEnemy walkingEnemy;
     ShooterEnemy shooterEnemy1;
+    ShooterEnemy shooterEnemy2;
+    ShooterEnemy shooterEnemy3;
 
     Texture2D backgroundL1;
     Texture2D backgroundL2;

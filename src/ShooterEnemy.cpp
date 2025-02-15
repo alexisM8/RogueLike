@@ -1,7 +1,7 @@
 #include "../include/ShooterEnemy.hpp"
 
 ShooterEnemy::ShooterEnemy(Vector2 startPos) {
-    shooterenemySpeed = 5.0f;
+    shooterenemySpeed = 7.0f;
     position = {startPos.x, startPos.y, 20, 20};
 }
 

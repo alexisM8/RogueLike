@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "../include/SceneOne.hpp"
 #include "../include/MainScreen.hpp"
+#include "../include/WinScreen.hpp"
 
 Game::Game() {
     // Initialize window
@@ -13,6 +14,7 @@ Game::Game() {
 
     // First run
     firstRun = true;
+    wonGame = false;
 
 }
 Game::~Game() {
@@ -48,6 +50,10 @@ void Game::cleanup() {
         delete character;
         character = nullptr;
     }
+    if (winScreen) {
+        delete winScreen;
+        winScreen = nullptr;
+    }
 }
 
 void Game::run() {
@@ -56,21 +62,26 @@ void Game::run() {
     // Set first scene
     setScene(new SceneOne(this));
     mainSceen = new MainScreen(this);
+    winScreen = new WinScreen(this);
     character = new Character(this);
     mainSceen->load();
+    winScreen->load();
     while (!WindowShouldClose()) {
         if (IsKeyPressed(KEY_ESCAPE)) break;
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        if (firstRun) {
+        if (firstRun && !wonGame) {
             mainSceen->update();
             mainSceen->render();
         }
-        if (currentScene && !firstRun) {
+        if (currentScene && !firstRun && !wonGame) {
             currentScene->update();
             currentScene->render();
         }
-
+        if (wonGame && !firstRun){
+            winScreen->update();
+            winScreen->render();
+        }
         EndDrawing();
     }
     cleanup();

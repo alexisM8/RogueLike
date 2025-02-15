@@ -29,6 +29,7 @@ Character::Character(Game* game) : game(game) {
     alpha2 = 0.0f;
     transitioning = false;
     dead = false;
+    position = { 100.0f, groundLevel};
 }
 
 Character::~Character() {
@@ -67,7 +68,6 @@ void Character::load() {
     currentFrame = 0.0f;
     frameTime = 0.05f;
     timer = 0.0f;
-    position = { game->screenWidth / 2.0f, game->screenHeight / 2.0f };
 }
 
 void Character::move(Rectangle platforms[], int platformCount) {

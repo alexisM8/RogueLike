@@ -3,7 +3,7 @@
 
 SeekingEnemy::SeekingEnemy(Vector2 startPos) {
     seekingenemySpeed = 3.5f;
-    position = {startPos.x, startPos.y, 75, 75 };
+    position = {startPos.x, startPos.y, 50, 50 };
 }
 
 SeekingEnemy::~SeekingEnemy() {
