@@ -43,6 +43,9 @@ This is a 2D action-adventure game built with Raylib, where you control a charac
     ```bash
     git clone https://github.com/yourusername/roguelike.git
     cd roguelike
+    git submodule update --init --recursive
+    sudo apt update
+    sudo apt install libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl1-mesa-dev
     ```
 
 2. Build the project:
