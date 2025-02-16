@@ -33,7 +33,7 @@ This is a 2D action-adventure game built with Raylib, where you control a charac
 
 ## Requirements
 
-- A C++ compiler (such as `g++` or `clang++`).
+- A C++ compiler (`g++` or `clang++`).
 - CMake for building the project.
 
 ## Installation
