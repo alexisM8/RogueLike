@@ -7,7 +7,7 @@
 
 class SceneThree : public Scene {
 private:
-    static const int platformCount = 1;
+    static const int platformCount = 3;
     Rectangle platforms[platformCount];
     Rectangle door;
 

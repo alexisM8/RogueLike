@@ -14,10 +14,12 @@ SceneThree::SceneThree(Game* game)
     backgroundL3 = LoadTexture("../assets/Backgrounds/background_2.png");
 
     // Create door
-    door = { 130, 500, 50, 75 };
+    door = { 1300, 350, 50, 75 };
 
     // Initialize the platforms
     platforms[0] = { 400, 575, 500, 20 };
+    platforms[1] = { 600, 420, 150, 20 };
+    platforms[2] = { 1300, 425, 50, 20 };
 }
 
 SceneThree::~SceneThree() {

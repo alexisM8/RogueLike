@@ -4,7 +4,9 @@
 #include "raylib.h"
 
 SceneTwo::SceneTwo(Game* game) : Scene(game), game(game),
-    seekingEnemy1(Vector2{1300, 100})
+    seekingEnemy1(Vector2{1300, 100}),
+    shooterEnemy1(Vector2{1350, 300}),
+    shooterEnemy2(Vector2{1350, 150})
 {
     // Load backgrounds
     backgroundL1 = LoadTexture("../assets/Backgrounds/background_0.png");
@@ -32,8 +34,16 @@ void SceneTwo::update() {
         game->character->transitioning = true;
     }
     game->character->move(platforms, platformCount);
-    seekingEnemy1.move(game->character->getPosition());
+    // seekingEnemy1.move(game->character->getPosition());
+    shooterEnemy1.move();
+    shooterEnemy2.move();
     if (game->AtOject({game->character->position.x, game->character->position.y, game->character->characterWidth, game->character->characterHeight}, seekingEnemy1.getPosition())) {
+        game->character->dead = true;
+    }
+    if (game->AtOject({game->character->position.x, game->character->position.y, game->character->characterWidth, game->character->characterHeight}, shooterEnemy1.getPosition())) {
+        game->character->dead = true;
+    }
+    if (game->AtOject({game->character->position.x, game->character->position.y, game->character->characterWidth, game->character->characterHeight}, shooterEnemy2.getPosition())) {
         game->character->dead = true;
     }
 }
@@ -61,7 +71,9 @@ void SceneTwo::render() {
 
     // Draw rectangles
     DrawRectangleRec(door, RED);
-    DrawRectangleRec(seekingEnemy1.getPosition(), MAROON);
+    // DrawRectangleRec(seekingEnemy1.getPosition(), MAROON);
+    DrawRectangleRec(shooterEnemy1.getPosition(), GREEN);
+    DrawRectangleRec(shooterEnemy2.getPosition(), GREEN);
 
     // Draw Texts
     DrawText("Welcome to Scene 2!", 10, 10, 30, DARKPURPLE);

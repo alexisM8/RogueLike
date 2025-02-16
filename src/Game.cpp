@@ -81,6 +81,8 @@ void Game::run() {
         if (wonGame && !firstRun){
             winScreen->update();
             winScreen->render();
+            character->position.x = 100.0f;
+            character->position.y = character->groundLevel;
         }
         EndDrawing();
     }

@@ -4,6 +4,7 @@
 #include "Scene.hpp"
 #include "Game.hpp"
 #include "SeekingEnemy.hpp"
+#include "ShooterEnemy.hpp"
 
 class SceneTwo : public Scene {
 private:
@@ -12,6 +13,8 @@ private:
     Rectangle door;
 
     SeekingEnemy seekingEnemy1;
+    ShooterEnemy shooterEnemy1;
+    ShooterEnemy shooterEnemy2;
 
     Texture2D backgroundL1;
     Texture2D backgroundL2;
